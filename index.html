@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sCOOL - Онлайн навчання</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      .main-container {
+        width: 100%;
+        max-width: 1200px;
+        padding: 40px;
+        border-radius: 15px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color: #ffffff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        margin: 0 auto 50px auto; /* Центрирование + нижний отступ */
+        z-index: 1;
+      }
+
+      .title {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        color: #333333;
+      }
+
+      .content {
+        display: flex;
+        flex-wrap: wrap; /* Адаптивное размещение */
+        justify-content: center;
+        gap: 20px;
+      }
+
+      .card {
+        flex: 1 1 300px; /* Минимум 300px, адаптивно */
+        max-width: 300px;
+        text-align: center;
+        padding: 20px;
+        border: 1px solid #e0e0e0;
+        border-radius: 15px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .card:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      .card-image {
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        margin-bottom: 15px;
+        border-radius: 10px;
+      }
+
+      .card-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #555555;
+        margin-top: 10px;
+      }
+
+      .cont {
+        width: 100%;
+        height: auto; /* Автоматическая высота */
+        background-color: white;
+        background-image: url("https://cdn.discordapp.com/attachments/802557573948899388/1321835835116621875/Frame_8.png?ex=676eaf0d&is=676d5d8d&hm=9c77166314d27aca44f311550f34440bdc56d1d756c0aaa23b6085c29341ebf9&");
+        height: 900px;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        padding-top: 250px;
+      }
+      /* Блок контактов */
+      .contacts {
+        padding: 50px 20px;
+        background-color: #f8f8f8;
+        text-align: center;
+      }
+
+      .contacts-container {
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+
+      .contacts h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #333333;
+      }
+
+      .contacts p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        color: #555555;
+      }
+
+      .contact-info {
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+        margin-bottom: 40px;
+        flex-wrap: wrap; /* Чтобы элементы располагались адаптивно */
+      }
+
+      .contact-item {
+        flex: 1 1 200px;
+        text-align: left;
+      }
+
+      .contact-item h3 {
+        font-size: 1.5rem;
+        color: #007bff; /* Синий цвет */
+        margin-bottom: 10px;
+      }
+
+      .contact-item p {
+        font-size: 1.1rem;
+        color: #333333;
+      }
+
+      .social-links {
+        margin-top: 20px;
+      }
+
+      .social-link {
+        font-size: 1.2rem;
+        color: #555555;
+        margin: 10px;
+        text-decoration: none;
+      }
+
+      .social-link:hover {
+        color: #007bff; /* Синий цвет при наведении */
+      }
+    </style>
+  </head>
+  <body>
+    <app-header></app-header>
+    <main
+      style="
+        background-image: url('https://cdn.discordapp.com/attachments/802557573948899388/1321834005082935388/background-1.jpg?ex=676ead59&is=676d5bd9&hm=20493fe8fea9b1d0b0c2181f0c5a39be39c2cd575c84f3d89a3f433d29896079');
+        height: 500px;
+        background-size: cover; /* Или use 'contain' */
+        background-position: center;
+        background-repeat: no-repeat;
+      "
+    >
+      <section class="intro">
+        <h1>Ласкаво просимо на платформу sCOOL</h1>
+        <p>Знайдіть найкращі курси та репетиторів для саморозвитку!</p>
+        <button onclick="goToCourses()">Переглянути курси</button>
+      </section>
+    </main>
+    <br />
+    <div class="cont">
+      <div class="main-container">
+        <h1 class="title">Платформа для навчання</h1>
+        <div class="content">
+          <div class="card">
+            <img
+              src="https://media.discordapp.net/attachments/802557573948899388/1321840388708892754/Wavy_Edu-05_Single-08.jpg?ex=676eb34b&is=676d61cb&hm=b08112fb9a1ff93860a6c621003c1fc106d81f36b37e59cd7f6e8adc9cad756e&=&format=webp&width=903&height=903"
+              alt="Репетиторство"
+              class="card-image"
+            />
+            <p class="card-title">Репетиторство</p>
+          </div>
+          <div class="card">
+            <img
+              src="https://media.discordapp.net/attachments/802557573948899388/1321840390831345815/Wavy_Lst-06_Single-10.jpg?ex=676eb34b&is=676d61cb&hm=1e2a13a8a4e66d93f4ea904f2b9fdd58436360059d3fcaa3f40f48312dc52a3b&=&format=webp&width=903&height=903"
+              alt="Курси"
+              class="card-image"
+            />
+            <p class="card-title">Курси</p>
+          </div>
+          <div class="card">
+            <img
+              src="https://cdn.discordapp.com/attachments/802557573948899388/1321840386582511626/Wavy_Edu-01_Single-10.jpg?ex=676eb34a&is=676d61ca&hm=6dd2080ed2f1733a48bbf037c1e98f2148df9abffa5b866c34fe0843a338c9ed&"
+              alt="Бібліотека"
+              class="card-image"
+            />
+            <p class="card-title">Бібліотека</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Блок контактов с id="contacts" -->
+    <section class="contacts" id="contacts">
+      <div class="contacts-container">
+        <h2>Контакти</h2>
+        <p>Зв'яжіться з нами для будь-яких запитань або консультацій.</p>
+        <div class="contact-info">
+          <div class="contact-item">
+            <h3>Телефон</h3>
+            <p>+380 44 123 45 67</p>
+          </div>
+          <div class="contact-item">
+            <h3>Електронна пошта</h3>
+            <p>support@scool.com</p>
+          </div>
+          <div class="contact-item">
+            <h3>Адреса</h3>
+            <p>вул. Центральна, 10, Київ, Україна</p>
+          </div>
+        </div>
+        <div class="social-links">
+          <h3>Ми в соціальних мережах:</h3>
+          <a href="#" class="social-link">Facebook</a>
+          <a href="#" class="social-link">Instagram</a>
+          <a href="#" class="social-link">Twitter</a>
+        </div>
+      </div>
+    </section>
+    <footer>
+      <p>© 2024 sCOOL. Всі права захищені.</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

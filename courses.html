@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sCOOL - Курси та Репетиторство</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+      }
+
+      .header {
+        background-color: #007bff;
+        color: white;
+        padding: 20px;
+        text-align: center;
+        font-size: 1.5rem;
+      }
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        margin: 20px;
+      }
+
+      .filters select,
+      .filters input {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 1rem;
+      }
+
+      .courses-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        padding: 20px;
+        justify-content: center;
+      }
+
+      .card {
+        width: 300px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 20px;
+        text-align: center;
+      }
+
+      .card img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 15px;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #333;
+      }
+
+      .card-category {
+        color: #007bff;
+        margin: 10px 0;
+      }
+
+      .card-price {
+        font-size: 1.1rem;
+        color: #28a745;
+      }
+
+      .my-courses {
+        margin: 20px;
+        padding: 20px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
+
+      .my-courses h2 {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+
+      .my-course-item {
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <app-header></app-header>
+
+    <div class="courses-container" id="coursesContainer"></div>
+    <footer>
+      <p>© 2024 sCOOL. Всі права захищені.</p>
+    </footer>
+    <script>
+      const data = [];
+      const categories = ["Курси"];
+      const subjects = [
+        "Іноземні мови",
+        "Математика",
+        "Програмування",
+        "Дизайн",
+      ];
+      for (let i = 1; i <= 40; i++) {
+        data.push({
+          id: i,
+          title: `Пропозиція №${i}`,
+          category: categories[Math.floor(Math.random() * categories.length)],
+          subject: subjects[Math.floor(Math.random() * subjects.length)],
+          price: Math.floor(Math.random() * 5000) + 500,
+          image: "https://via.placeholder.com/300x200",
+        });
+      }
+
+      const isAuthenticated = () => {
+        return localStorage.getItem("userRole") === "student";
+      };
+
+      function loadContent(category) {
+        const filteredData = data.filter((item) => item.category === category);
+        renderCourses(filteredData);
+      }
+
+      function renderCourses(courses) {
+        const container = document.getElementById("coursesContainer");
+        container.innerHTML = "";
+        courses.forEach((course) => {
+          const card = document.createElement("div");
+          card.className = "card";
+          card.innerHTML = `
+                    <img src="${course.image}" alt="${course.title}">
+                    <div class="card-title">${course.title}</div>
+                    <div class="card-category">${course.category} - ${course.subject}</div>
+                    <div class="card-price">${course.price} грн</div>
+                    
+                `;
+          container.appendChild(card);
+        });
+      }
+
+      function enrollCourse(courseId) {
+        const course = data.find((c) => c.id === courseId);
+        if (!course) return;
+
+        let myCourses = JSON.parse(localStorage.getItem("myCourses")) || [];
+
+        if (!myCourses.some((c) => c.id === courseId)) {
+          myCourses.push(course);
+          localStorage.setItem("myCourses", JSON.stringify(myCourses));
+          alert(`Ви записалися на: ${course.title}`);
+        } else {
+          alert(`Ви вже записані на цей курс: ${course.title}`);
+        }
+      }
+
+      loadContent("Курси");
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Профіль</title>
+    <link rel="stylesheet" href="styles.css" />
+    <style>
+      /* Загальні стилі для модального вікна */
+      .modal {
+        display: none; /* Приховане за замовчуванням */
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6); /* Напівпрозорий чорний фон */
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .modal-content {
+        background: #ffffff; /* Білий фон */
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2); /* Тінь для об’єму */
+        max-width: 400px;
+        width: 90%;
+        position: relative;
+        animation: fadeIn 0.3s ease-out;
+      }
+
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #f0f0f0;
+        margin-bottom: 15px;
+      }
+
+      .modal-header h2 {
+        font-size: 20px;
+        margin: 0;
+        color: #333;
+      }
+
+      .modal-header button {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: #888;
+        cursor: pointer;
+      }
+
+      .modal-header button:hover {
+        color: #000;
+      }
+
+      .modal-body label {
+        display: block;
+        margin-bottom: 10px;
+        font-size: 14px;
+        color: #555;
+      }
+
+      .modal-body input,
+      .modal-body select,
+      .modal-body textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+
+      .modal-body textarea {
+        resize: none;
+      }
+
+      .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+      }
+
+      .modal-footer button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+      }
+
+      .modal-footer #save-profile-btn {
+        background-color: #4caf50; /* Зелена кнопка */
+        color: white;
+      }
+
+      .modal-footer #save-profile-btn:hover {
+        background-color: #45a049;
+      }
+
+      .modal-footer #cancel-profile-btn {
+        background-color: #f44336; /* Червона кнопка */
+        color: white;
+      }
+
+      .modal-footer #cancel-profile-btn:hover {
+        background-color: #e53935;
+      }
+
+      /* Анімація для модального вікна */
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <app-header></app-header>
+    <main class="profile">
+      <section class="profile-header">
+        <img
+          src="avatar.png"
+          alt="Аватар користувача"
+          id="user-avatar"
+          class="avatar"
+        />
+        <input
+          type="file"
+          id="avatar-input"
+          accept="image/*"
+          style="display: none"
+        />
+        <h1 id="profile-name">Ім'я Користувача</h1>
+        <p class="email" id="profile-email">user@example.com</p>
+        <button class="edit-profile-btn" id="edit-profile-btn">
+          Редагувати профіль
+        </button>
+      </section>
+
+      <section class="profile-details">
+        <h2>Інформація про користувача</h2>
+        <ul>
+          <li>
+            <strong>Дата народження:</strong>
+            <span id="profile-birthdate"></span>
+          </li>
+          <li><strong>Місто:</strong> <span id="profile-city"></span></li>
+          <li><strong>Стать:</strong> <span id="profile-gender"></span></li>
+          <li><strong>Про себе:</strong> <span id="profile-about"></span></li>
+        </ul>
+      </section>
+
+      <section class="profile-courses" style="display: none">
+        <h2>Мої курси</h2>
+        <ul></ul>
+      </section>
+
+      <section class="profile-materials" style="display: none">
+        <h2>Методичні матеріали</h2>
+        <ul></ul>
+      </section>
+      <button onclick="logoutUser()" style="background-color: #94201e">
+        Вийти
+      </button>
+      <button onclick="deleteUser()" style="background-color: #94201e">
+        Видалити акаунт
+      </button>
+    </main>
+
+    <footer>
+      <p>© 2024 Всі права захищені</p>
+    </footer>
+
+    <!-- Модальное окно -->
+    <div class="modal" id="profile-modal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Редагувати профіль</h2>
+          <button id="close-modal-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="edit-profile-form">
+            <label
+              >Ім'я:
+              <input type="text" id="edit-name" required />
+            </label>
+            <label
+              >Email:
+              <input type="email" id="edit-email" required />
+            </label>
+            <label
+              >Дата народження:
+              <input type="date" id="edit-birthdate" />
+            </label>
+            <label
+              >Місто:
+              <input type="text" id="edit-city" />
+            </label>
+            <label
+              >Стать:
+              <select id="edit-gender">
+                <option value="Чоловік">Чоловік</option>
+                <option value="Жінка">Жінка</option>
+                <option value="Інше">Інше</option>
+              </select>
+            </label>
+            <label
+              >Про себе:
+              <textarea id="edit-about" rows="4"></textarea>
+            </label>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button id="save-profile-btn">Зберегти</button>
+          <button id="cancel-profile-btn">Скасувати</button>
+        </div>
+      </div>
+    </div>
+    <!-- Кнопка для выхода -->
+
+    <script>
+      window.onload = function () {
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+        if (loggedInUser) {
+          document.querySelector(".profile-header h1").textContent =
+            loggedInUser.username;
+          document.querySelector(".profile-header .email").textContent =
+            loggedInUser.email;
+
+          // Проверка типа аккаунта и отображение соответствующего контента
+          if (loggedInUser.accountType === "student") {
+            document.querySelector(".profile-courses").style.display = "block"; // Показываем курсы для ученика
+            document.querySelector(".profile-materials").style.display = "none"; // Скрываем методические материалы
+          } else if (loggedInUser.accountType === "teacher") {
+            document.querySelector(".profile-courses").style.display = "none"; // Скрываем курсы для преподавателя
+            document.querySelector(".profile-materials").style.display =
+              "block"; // Показываем методические материалы
+          }
+        }
+      };
+      document.addEventListener("DOMContentLoaded", () => {
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+        const profileModal = document.getElementById("profile-modal");
+        const editProfileBtn = document.getElementById("edit-profile-btn");
+        const closeModalBtn = document.getElementById("close-modal-btn");
+        const cancelProfileBtn = document.getElementById("cancel-profile-btn");
+        const saveProfileBtn = document.getElementById("save-profile-btn");
+
+        const fillProfile = () => {
+          document.getElementById("profile-name").textContent =
+            loggedInUser.username || "Ім'я Користувача";
+          document.getElementById("profile-email").textContent =
+            loggedInUser.email || "user@example.com";
+          document.getElementById("profile-birthdate").textContent =
+            loggedInUser.birthdate || "01.01.2000";
+          document.getElementById("profile-city").textContent =
+            loggedInUser.city || "Київ";
+          document.getElementById("profile-gender").textContent =
+            loggedInUser.gender || "Невідомо";
+          document.getElementById("profile-about").textContent =
+            loggedInUser.about || "Додайте інформацію про себе.";
+        };
+
+        const openModal = () => {
+          profileModal.style.display = "flex";
+          document.getElementById("edit-name").value =
+            loggedInUser.username || "";
+          document.getElementById("edit-email").value =
+            loggedInUser.email || "";
+          document.getElementById("edit-birthdate").value =
+            loggedInUser.birthdate || "";
+          document.getElementById("edit-city").value = loggedInUser.city || "";
+          document.getElementById("edit-gender").value =
+            loggedInUser.gender || "Чоловік";
+          document.getElementById("edit-about").value =
+            loggedInUser.about || "";
+        };
+
+        const closeModal = () => {
+          profileModal.style.display = "none";
+        };
+
+        const saveProfile = () => {
+          loggedInUser.username = document.getElementById("edit-name").value;
+          loggedInUser.email = document.getElementById("edit-email").value;
+          loggedInUser.birthdate =
+            document.getElementById("edit-birthdate").value;
+          loggedInUser.city = document.getElementById("edit-city").value;
+          loggedInUser.gender = document.getElementById("edit-gender").value;
+          loggedInUser.about = document.getElementById("edit-about").value;
+
+          localStorage.setItem("loggedInUser", JSON.stringify(loggedInUser));
+          fillProfile();
+          closeModal();
+        };
+
+        editProfileBtn.addEventListener("click", openModal);
+        closeModalBtn.addEventListener("click", closeModal);
+        cancelProfileBtn.addEventListener("click", closeModal);
+        saveProfileBtn.addEventListener("click", saveProfile);
+
+        // Инициализация профиля
+        fillProfile();
+      });
+
+      // Завантаження збереженого аватару
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedAvatar = localStorage.getItem("userAvatar");
+        if (savedAvatar) {
+          document.getElementById("user-avatar").src = savedAvatar;
+        }
+      });
+
+      // Обробка натискання на аватар
+      const avatar = document.getElementById("user-avatar");
+      const avatarInput = document.getElementById("avatar-input");
+
+      avatar.addEventListener("click", () => {
+        avatarInput.click(); // Імітуємо натискання на прихований input
+      });
+
+      // Обробка зміни файлу
+      avatarInput.addEventListener("change", (event) => {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const avatarURL = e.target.result;
+            avatar.src = avatarURL; // Оновлюємо аватар на сторінці
+            localStorage.setItem("userAvatar", avatarURL); // Зберігаємо в Local Storage
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      function logoutUser() {
+        // Удаление информации о текущем пользователе из localStorage
+        localStorage.removeItem("loggedInUser");
+
+        // Перенаправление на страницу авторизации
+        window.location.href = "authentication.html";
+      }
+
+      function deleteUser() {
+        // Получаем текущего авторизованного пользователя
+        const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
+
+        if (loggedInUser) {
+          // Получаем всех пользователей из localStorage
+          const users = JSON.parse(localStorage.getItem("users")) || [];
+
+          // Удаляем текущего пользователя из списка
+          const updatedUsers = users.filter(
+            (user) => user.email !== loggedInUser.email
+          );
+
+          // Сохраняем обновленный список пользователей в localStorage
+          localStorage.setItem("users", JSON.stringify(updatedUsers));
+
+          // Удаляем данные о текущем пользователе
+          localStorage.removeItem("loggedInUser");
+
+          // Перенаправление на страницу авторизации
+          alert("Ваш акаунт було успішно видалено.");
+          window.location.href = "authentication.html";
+        } else {
+          alert("Ви не авторизовані.");
+        }
+      }
+    </script>
+    <script src="script.js"></script>
+  </body>
+</html>

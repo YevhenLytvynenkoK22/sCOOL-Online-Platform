@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Авторизація - sCOOL</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      function loginUser(event) {
+        event.preventDefault();
+
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value;
+
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const user = users.find(
+          (user) => user.email === email && user.password === password
+        );
+
+        if (user) {
+          localStorage.setItem("loggedInUser", JSON.stringify(user));
+          alert("Авторизація успішна!");
+
+          window.location.href = "profile.html";
+        } else {
+          alert("Неправильний email або пароль.");
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <app-header></app-header>
+    <main>
+      <section class="auth">
+        <h1>Авторизація</h1>
+        <form id="authForm" onsubmit="loginUser(event)">
+          <label>
+            Email:
+            <input type="email" id="email" required />
+          </label>
+          <label>
+            Пароль:
+            <input type="password" id="password" required />
+          </label>
+          <button type="submit">Увійти</button>
+          <p class="already-account">
+            Немає облікового запису?
+            <a href="registration.html">Зареєструватися</a>
+          </p>
+        </form>
+      </section>
+    </main>
+    <footer>
+      <p>© 2024 sCOOL. Всі права захищені.</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>
